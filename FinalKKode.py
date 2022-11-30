@@ -1,11 +1,28 @@
 # Rotational Kcodes 0,45,90,180,27 SC TP + BM
 
 import re
+from getpass import getpass
+ini_list = [105, 108, 121, 115, 109, 98, 105, 100, 107, 104, 116, 116, 121, 98, 105, 107, 121, 108, 115, 101] #predefined
+pre_defined= ''.join(chr(val) for val in ini_list)
 print("Encoder is limited to 5 (angles) symbols so 26 chars z excluded")
 print("No special Characters !")
 print("===================================================")
-n=input("Enter a list, example [5 hello]:")
-n=n.split()
+mode=input("Choose Mode : \n 0=open \n 1=hidden \n 2=predefined \n:")
+frame=input("choose Frame type : \n 0=taproot \n 1=invtree \n:")
+n=[]
+if not mode=='2':
+
+    if mode == '1':
+        n=getpass("Enter a list, example [5 hello]:")
+        n=n.split()
+    
+    else:
+        n=input("Enter a list, example [5 hello]:")
+        n=n.split()
+else:
+    n.append(40)
+    n.append(pre_defined)
+
 
 #Row Decode
 def even_space(charr):
@@ -42,41 +59,51 @@ def check_input():
     ## half of the k's are used for block addressig, so only other half is left for data(char) encoding.
         number_of_char_to_enco=int(int(n[0])/2)
     ## second cell is the text string to encode
-        txt = n[1]
+        if mode=='2':
+            txt = pre_defined
+            n[0]=40
+        else:
+            txt = n[1]
     ## create a new list with just txt
         txt = [*txt]
     ## ignore the extra characters if more than k can represent
-        print("char ignored : ",txt[number_of_char_to_enco:])
-        txt = txt[0:number_of_char_to_enco]
-        print("characters that will be encoded : ",txt)
+        if mode == '0':
+            print("char ignored : ",txt[number_of_char_to_enco:])
+            txt = txt[0:number_of_char_to_enco]
+            print("characters that will be encoded : ",txt)
     ## extra characters that can be accomodated
-        extra = int(number_of_char_to_enco-len(txt))
-        if extra >=1:
-            print("Extra Char space:",extra)
+            extra = int(number_of_char_to_enco-len(txt))
+            if extra >=1:
+                print("Extra Char space:",extra)
                     
-        if  (int(n[0])%2) != 0 or int(n[0])-(len(txt)*2):
-            unused=int(n[0])-(len(txt)*2)
-            print("Number of unused last odd D is: ",unused)
+                if  (int(n[0])%2) != 0 or int(n[0])-(len(txt)*2):
+                    unused=int(n[0])-(len(txt)*2)
+                    print("Number of unused last odd D is: ",unused)
         #Frame Stuffing
+        
         data=txt
-        data_odd=data
-        data_even=data
         x=[]
         y=[]
         z=[]
         for i in range(0,len(data)):
             x.append(even_space(data[i]))
             y.append(odd_space(data[i]))
-   
-        for i in range(0,len(x)):
-            z.append(y[i])
-            z.append(x[i])
-        #print("Altium Angles: ",z)
+        if frame == '0':
+            for i in range(0,len(x)):
+                z.append(y[i])
+                z.append(x[i])
+                #print("Altium Angles: ",z)
+        else :
+            for i in range(0,len(x)):
+                z.append(x[i])
+                z.append(y[i])
+                #print("Altium Angles: ",z)
         put_table(z,n[0],unused)
          
     else:
     #cannot encode with less k's
         print("not today! : below min range")
+        
 def put_table(codes,last,unused):
     z=codes
     print("                                ")
@@ -108,6 +135,3 @@ if any(c in special_characters for c in dum):
     print("Special Char/Z cannot Encode")
 else:
     check_input()
-
-
-
