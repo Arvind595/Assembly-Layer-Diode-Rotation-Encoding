@@ -1,5 +1,5 @@
 # Rotational Kcodes 0,45,90,180,27 SC TP + BM
-
+#Skadoosh.Legacy.V0.1
 import re
 from getpass import getpass
 ini_list = [105, 108, 121, 115, 109, 98, 105, 100, 107, 104, 116, 116, 121, 98, 105, 107, 121, 108, 115, 101] #predefined
@@ -13,7 +13,7 @@ n=[]
 if not mode=='2':
 
     if mode == '1':
-        n=getpass("Enter a list, example [5 hello]:")
+        n=getpass("Enter :")
         n=n.split()
     
     else:
