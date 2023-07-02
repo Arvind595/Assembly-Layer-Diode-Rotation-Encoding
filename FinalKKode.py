@@ -12,6 +12,7 @@ def decode(y):
             flag=flag+1
             
     if len(y) > 1 and len(y)%2==0 and flag == 0 :
+        y=y.split()
         alpha=[
                  ['a', 'b', 'c', 'd', 'e'], 
                  ['f', 'g', 'h', 'i', 'j'], 
@@ -24,13 +25,17 @@ def decode(y):
         odd=[]
         frame1=[]
         frame2=[]
-
+        j=0
+        k=0
         for i in range(0, len(y)):
             if i%2 == 0:
                 even.append(y[i])
+                j=j+1
             else:
                 odd.append(y[i])
-        
+                k=k+1
+        #print(even)
+        #print(odd)
         for i in range (0, len(even)):
             
             frame1.append(alpha [beta.index(even[i])] [beta.index(odd[i])] )
@@ -165,14 +170,15 @@ n=[]
 
 print("\n===================================================")
 print("\n \t\t Rotational Kcodes \n \t\t Skadoosh.Legacy.V0.4 \n")
-print("===================================================")
+print("===================================================\n")
 
 start=input("\nChoose Function  \n 1.ENCODE \n 2.DECODE (default) : ")
 
 
 if  start == '1':
-        
-    print("\n===================================================")
+    
+    print("\n")    
+    print("===================================================")
     print("Encoder is limited to 5 (angles) symbols so 26 chars z excluded \n")
     print("No special Characters !")
     print("===================================================\n")
