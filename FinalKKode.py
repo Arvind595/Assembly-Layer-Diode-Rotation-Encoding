@@ -1,29 +1,54 @@
 # Rotational Kcodes 0,45,90,180,27 SC TP + BM
-#Skadoosh.Legacy.V0.1
+#Skadoosh.Legacy.V0.4
 #https://www.onlinegdb.com/online_python_compiler
+
 import re
 from getpass import getpass
-ini_list = [105, 108, 121, 115, 109, 98, 105, 100, 107, 104, 116, 116, 121, 98, 105, 107, 121, 108, 115, 101] #predefined
-pre_defined= ''.join(chr(val) for val in ini_list)
-print("Encoder is limited to 5 (angles) symbols so 26 chars z excluded")
-print("No special Characters !")
-print("===================================================")
-mode=input("Choose Mode : \n 0=open \n 1=hidden \n 2=predefined \n:")
-frame=input("choose Frame type : \n 0=taproot \n 1=invtree \n:")
-n=[]
-if not mode=='2':
 
-    if mode == '1':
-        n=getpass("Enter :")
-        n=n.split()
-    
+def decode(y):
+    flag=0
+    for i in y:
+        if ((bool(re.match('[a-zA-Z!@#$%^&*()-+?_=,<>/]',i))))==True:
+            flag=flag+1
+            
+    if len(y) > 1 and len(y)%2==0 and flag == 0 :
+        alpha=[
+                 ['a', 'b', 'c', 'd', 'e'], 
+                 ['f', 'g', 'h', 'i', 'j'], 
+                 ['k', 'l', 'm', 'n', 'o'],
+                 ['p', 'q', 'r', 's', 't'],
+                 ['u', 'v', 'w', 'x', 'y'],]
+
+        beta=['0','45','90','180','270']
+        even=[]
+        odd=[]
+        frame1=[]
+        frame2=[]
+
+        for i in range(0, len(y)):
+            if i%2 == 0:
+                even.append(y[i])
+            else:
+                odd.append(y[i])
+        
+        for i in range (0, len(even)):
+            
+            frame1.append(alpha [beta.index(even[i])] [beta.index(odd[i])] )
+            frame2.append(alpha [beta.index(odd[i])] [beta.index(even[i])] )
+        frame1=''.join(frame1)
+        frame2=''.join(frame2)
+        
+        
+        print("\n   Decryption Sucessfull !!")
+        print("=================================================")
+        print("Frame 1 Message: ",frame1)   
+        print("Frame 2 Message: ",frame2)   
+        print("=================================================")
+     
+        
     else:
-        n=input("Enter a list, example [5 hello]:")
-        n=n.split()
-else:
-    n.append(40)
-    n.append(pre_defined)
-
+        print("----ERROR : uneven data lenght/invalid characters ----")
+        
 
 #Row Decode
 def even_space(charr):
@@ -53,10 +78,10 @@ def odd_space(charrr):
         
 #prilimenary Test
 def check_input():
-    number_of_char_to_enco=int(n[0])
+    number_of_char_to_enco=int(n[0]) #first cell is diode count
     txt=[]
     unused=0
-    if number_of_char_to_enco >= 2:
+    if number_of_char_to_enco > 1: #cannot encode with less k's
     ## half of the k's are used for block addressig, so only other half is left for data(char) encoding.
         number_of_char_to_enco=int(int(n[0])/2)
     ## second cell is the text string to encode
@@ -69,23 +94,23 @@ def check_input():
         txt = [*txt]
     ## ignore the extra characters if more than k can represent
         if mode == '0':
-            print("char ignored : ",txt[number_of_char_to_enco:])
+            print("\nchar ignored : ",txt[number_of_char_to_enco:])
             txt = txt[0:number_of_char_to_enco]
-            print("characters that will be encoded : ",txt)
+            print("\ncharacters that will be encoded : ",txt)
     ## extra characters that can be accomodated
             extra = int(number_of_char_to_enco-len(txt))
             if extra >=1:
-                print("Extra Char space:",extra)
+                print("\nExtra Char space:",extra)
                     
                 if  (int(n[0])%2) != 0 or int(n[0])-(len(txt)*2):
                     unused=int(n[0])-(len(txt)*2)
-                    print("Number of unused last odd D is: ",unused)
+                    print("\nNumber of unused last odd D is: ",unused)
         #Frame Stuffing
         
         data=txt
-        x=[]
-        y=[]
-        z=[]
+        x=[] #to store block address
+        y=[] #to store cell address
+        z=[] #final angles
         for i in range(0,len(data)):
             x.append(even_space(data[i]))
             y.append(odd_space(data[i]))
@@ -100,13 +125,19 @@ def check_input():
                 z.append(y[i])
                 #print("Altium Angles: ",z)
         put_table(z,n[0],unused)
-         
-    else:
+        print("\n==============================END=================================\n")
+        #print(x)
+        #print(y)
+        #print(z)
+        
+    else :
     #cannot encode with less k's
         print("not today! : below min range")
         
 def put_table(codes,last,unused):
     z=codes
+    print("                                ")
+    print("\nEncryption Results : ")
     print("                                ")
     print("================================")
     print("Altium Diode Codes For D%d to D%d" % (1,int(last)-int(unused)))
@@ -126,13 +157,59 @@ def put_table(codes,last,unused):
         print(" D%d            |           -" % (int(last)+i))
     print("--------------------------------")
 
+#######################################################################################################
 
-## check for special characters - this encoder is limited to 5 (angles) symbols so 26 chars "z" excluded
-dum=""
-dum=dum.join(n[1])
-special_characters = "!@#$%^&*()-+?_=,<>/0123456789zZ"
+ini_list = [105, 108, 121, 115, 109, 98, 105, 100, 107, 104, 116, 116, 121, 98, 105, 107, 121, 108, 115, 101] #predefined
+pre_defined= ''.join(chr(val) for val in ini_list)
+n=[]
 
-if any(c in special_characters for c in dum):
-    print("Special Char/Z cannot Encode")
-else:
-    check_input()
+print("\n===================================================")
+print("\n \t\t Rotational Kcodes \n \t\t Skadoosh.Legacy.V0.4 \n")
+print("===================================================")
+
+start=input("\nChoose Function  \n 1.ENCODE \n 2.DECODE (default) : ")
+
+
+if  start == '1':
+        
+    print("\n===================================================")
+    print("Encoder is limited to 5 (angles) symbols so 26 chars z excluded \n")
+    print("No special Characters !")
+    print("===================================================\n")
+
+    mode=input("Choose Mode : \n 0 = open \n 1 = hidden (default) \n 2 = predefined : ")
+    frame=input("\nChoose Frame type : \n 0 = taproot \n 1 = invtree (default) : ")
+
+  
+    
+    if mode == '0': #open mode
+         n=input("\nEnter a list, example like [5 hello]: ") 
+         n=n.split()
+                   
+    elif mode =='2':  #predefined
+        n.append(40)
+        n.append(pre_defined) #predefined asci append
+        
+    else :
+        #Prompt the user for a password without echoing.
+        n=getpass("\nEnter data to encrypt: ") #hidden mode
+        n=n.split() #split into cells
+       
+    ## check for special characters - this encoder is limited to 5 (angles) symbols so 26 chars "z" excluded
+    dum=""
+    dum=dum.join(n[1]) #copy only the 1st cell string
+    special_characters = "!@#$%^&*()-+?_=,<>/0123456789zZ"
+    
+    if ((bool(re.match('[a-zA-Z!@#$%^&*()-+?_=,<>/]',str(n[0])))==True)):
+        print("nSpecial Char/Z cannot Encode")
+    
+    elif any(c in special_characters for c in dum): #string check
+        print("\nSpecial Char/Z cannot Encode")
+        
+    else:
+        check_input()
+       
+else : 
+      decode(input(("\nEnter a list to decode: ")))
+
+## need to add self test feature
