@@ -1,6 +1,8 @@
 # Rotational Kcodes 0,45,90,180,27 SC TP + BM
-#Skadoosh.Legacy.V0.4
+#Skadoosh.Legacy.V0.5
 #https://www.onlinegdb.com/online_python_compiler
+
+#revision : dora glitch fixed --removed even check "len(y)%2==0"
 
 import re
 from getpass import getpass
@@ -11,7 +13,7 @@ def decode(y):
         if ((bool(re.match('[a-zA-Z!@#$%^&*()-+?_=,<>/]',i))))==True:
             flag=flag+1
             
-    if len(y) > 1 and len(y)%2==0 and flag == 0 :
+    if len(y) > 1 and  flag == 0 :
         y=y.split()
         alpha=[
                  ['a', 'b', 'c', 'd', 'e'], 
@@ -169,7 +171,7 @@ pre_defined= ''.join(chr(val) for val in ini_list)
 n=[]
 
 print("\n===================================================")
-print("\n \t\t Rotational Kcodes \n \t\t Skadoosh.Legacy.V0.4 \n")
+print("\n \t\t Rotational Kcodes \n \t\t Skadoosh.Legacy.V0.5 \n")
 print("===================================================\n")
 
 start=input("\nChoose Function  \n 1.ENCODE \n 2.DECODE (default) : ")
