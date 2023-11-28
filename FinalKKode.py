@@ -14,7 +14,8 @@ def decode(y):
             flag=flag+1
             
     if len(y) > 1 and  flag == 0 :
-        y=y.split()
+        if (selftest==False):
+            y=y.split()
         alpha=[
                  ['a', 'b', 'c', 'd', 'e'], 
                  ['f', 'g', 'h', 'i', 'j'], 
@@ -132,6 +133,8 @@ def check_input():
                 z.append(y[i])
                 #print("Altium Angles: ",z)
         put_table(z,n[0],unused)
+        if(selftest):
+            decode(z)
         print("\n==============================END=================================\n")
         #print(x)
         #print(y)
@@ -169,6 +172,7 @@ def put_table(codes,last,unused):
 ini_list = [105, 108, 121, 115, 109, 98, 105, 100, 107, 104, 116, 116, 121, 98, 105, 107, 121, 108, 115, 101] #predefined
 pre_defined= ''.join(chr(val) for val in ini_list)
 n=[]
+selftest = False
 
 print("\n===================================================")
 print("\n \t\t Rotational Kcodes \n \t\t Skadoosh.Legacy.V0.5 \n")
@@ -187,11 +191,12 @@ if  start == '1':
 
     mode=input("Choose Mode : \n 0 = open \n 1 = hidden (default) \n 2 = predefined : ")
     frame=input("\nChoose Frame type : \n 0 = taproot \n 1 = invtree (default) : ")
+    selftest=int(input("\nEnable SelfTest ? \n 0 = Disable \n 1 = Enable : "))
 
   
     
     if mode == '0': #open mode
-         n=input("\nEnter a list, example like [5 hello]: ") 
+         n=input("\nEnter a list, example like [10 hello]: ") 
          n=n.split()
                    
     elif mode =='2':  #predefined
@@ -221,3 +226,4 @@ else :
       decode(input(("\nEnter a list to decode: ")))
 
 ## need to add self test feature
+## need to add default inputs and flow , change to bool variables
