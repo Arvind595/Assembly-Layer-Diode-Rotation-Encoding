@@ -1,6 +1,8 @@
 # Rotational Kcodes 0,45,90,180,27 SC TP + BM
 #Skadoosh.Legacy.V0.5
 #https://www.onlinegdb.com/online_python_compiler
+#frame2 input for decode
+#raw angles for copy pasting
 
 #revision : dora glitch fixed --removed even check "len(y)%2==0"
 
