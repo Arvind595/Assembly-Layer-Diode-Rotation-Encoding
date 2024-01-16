@@ -128,12 +128,12 @@ def check_input():
             for i in range(0,len(x)):
                 z.append(y[i])
                 z.append(x[i])
-                #print("Altium Angles: ",z)
+            print("Altium Angles: ",*z)
         else :
             for i in range(0,len(x)):
                 z.append(x[i])
                 z.append(y[i])
-                print("Altium Angles: ",z)
+            print("Altium Angles: ",*z)
         put_table(z,n[0],unused)
         if(selftest):
             decode(z)
